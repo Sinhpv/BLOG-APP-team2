@@ -1,7 +1,7 @@
 ((angular) => {
     //Component's Controller
-    componentsCtrl.$inject = ['$scope', 'AuthService', 'ArticlesService']; //Dependencies injection
-    function componentsCtrl($scope, AuthService, ArticlesService) {
+    componentsCtrl.$inject = ['$scope', '$state', 'ArticlesService']; //Dependencies injection
+    function componentsCtrl($scope, $state, ArticlesService) {
         $scope.articlesData = {
             articles: [],
             articlesCount: 1,
@@ -14,6 +14,7 @@
             },
             isLoading: false,
             inProfile: false,
+            usn: ''
         };
         $scope.updateArticles = (res) => {
             $scope.articlesData.articles = res.articles;
@@ -42,6 +43,20 @@
                         console.log('Error when get feed');
                     });
                 break;
+            case 'owned':
+                ArticlesService.Articles.getArticles({author: $scope.listConfig.usn})
+                    .$promise.then($scope.updateArticles)
+                    .catch(() => {
+                        console.log('Error when get fav');
+                    });
+                break;
+            case 'fav':
+                ArticlesService.Articles.getArticles({favorited: $scope.listConfig.usn})
+                    .$promise.then($scope.updateArticles)
+                    .catch(() => {
+                        console.log('Error when get fav');
+                    });
+                break;
             case 'tag':
                 if (!tag || tag === '') {
                     console.log('Tag is not valid');
@@ -59,6 +74,10 @@
         };
 
         $scope.toggleLike = (slug, i) => {
+            if (!this.isAuth) {
+                $state.go('sign', { signMode: 'login' });
+                return;
+            }
             $scope.articlesData.articles[i].isLoading = true;
             if ($scope.articlesData.articles[i].favorited) {
                 ArticlesService.Articles.unlikeArticle(
@@ -76,16 +95,23 @@
                 });
             }
         };
-        this.$onInit = () => {
-            $scope.listConfig.tagTab.tag = this.tag;
+
+        this.$onInit = function(){
+            if (this.usn) {
+                $scope.listConfig.usn = this.usn;
+                $scope.listConfig.inProfile = true;
+                $scope.changeTab('fav');
+                return;
+            }
             $scope.changeTab('global');
         };
 
-        this.$onChanges = (changes) => {
-            if (changes.tag) {
-                console.log(changes.tag.currentValue);
+        this.$onChanges = function(changes) {
+            if (changes.tag.currentValue) {
+                $scope.listConfig.tagTab.tag = this.tag;
                 $scope.changeTab('tag', changes.tag.currentValue);
             }
+
         };
     }
 
@@ -93,7 +119,7 @@
     let components = {
         templateUrl: 'template/articles.template.html',
         controller: componentsCtrl,
-        bindings: { isAuth: '<', tag: '<' },
+        bindings: { isAuth: '<', tag: '<', usn: '<' },
         controllerAs: '$ctrl',
     };
 
