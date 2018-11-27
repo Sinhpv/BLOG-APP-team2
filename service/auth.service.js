@@ -1,6 +1,6 @@
 ((angular) => {
-    AuthService.$inject = ['$cookies', '$http','$state'];
-    function AuthService($cookies, $http, $state) {
+    AuthService.$inject = ['$cookies', '$http','$state', '$q'];
+    function AuthService($cookies, $http, $state, $q) {
         
         this.base = 'https://conduit.productionready.io';
 
@@ -15,24 +15,15 @@
             return this.getUserInfo().then(() =>  true, () => false);
         };
 
-        this.register = (uname, email, pass) => {
-            let bodyRq = {
-                user: {
-                    username: 'Jacob',
-                    email: 'jakefjake.jake',
-                    password: 'jakejake',
-                },
-            };
+        this.register = (username, email, password) => {
+            let bodyRq = {user: {username,email,password}};
             return $http.post(`${this.base}/api/users`, bodyRq).then(
                 (res) => {
-                    console.log(res.data);
                     $cookies.put('token', res.data.user.token);
+                    $state.go('home', null,{reload: true});
                     return res.data;
                 },
-                (err) => {
-                    console.log(err.data);
-                    return err;
-                }
+                (err) => $q.reject(err.data)
             );
         };
 
@@ -55,21 +46,17 @@
             return $cookies.get('token');
         };
 
-        this.signIn = (email, pwd) => {
-            let bodyRq = {
-                user: {
-                    email: 'jake@jake.jake',
-                    password: 'jakejake',
-                },
-            };
+        this.signIn = (email, password) => {
+            let bodyRq = {user: {email, password}};
             return $http
                 .post(`${this.base}/api/users/login`, bodyRq)
                 .then(
                     res=>{  
                         $cookies.put('token', res.data.user.token);
+                        $state.go('home', null,{reload: true});
                         return res.data;
                     }, 
-                    err=>{return err.data;});
+                    err=>$q.reject(err.data));
         };
 
         this.signOut = ()=>{

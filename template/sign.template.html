@@ -2,12 +2,32 @@
     <div class="container page">
         <div class="row">
             <div class="col-md-6 offset-md-3 col-xs-12">
-                <h1 class="text-xs-center">Sign up</h1>
+                <h1 class="text-xs-center">
+                    {{ mode === 'login' ? 'Sign in' : 'Sign up' }}
+                </h1>
 
-                <p class="text-xs-center"><a href="">Have an account?</a></p>
+                <p class="text-xs-center">
+                    <a
+                        href=""
+                        ui-sref="sign({signMode: 'login'})"
+                        ng-show="mode==='register'"
+                        >Have an account?</a
+                    >
+                    <a
+                        href=""
+                        ui-sref="sign({signMode: 'register'})"
+                        ng-show="mode==='login'"
+                        >Need an account?</a
+                    >
+                </p>
 
                 <ul class="error-messages">
-                    <li>That email is already taken</li>
+                    <li ng-repeat="error in errors.email">
+                        That email {{ error }}
+                    </li>
+                    <li ng-repeat="error in errors.password">
+                        That password {{ error }}
+                    </li>
                 </ul>
 
                 <form>
@@ -16,6 +36,8 @@
                             class="form-control form-control-lg"
                             type="text"
                             placeholder="Your Name"
+                            ng-show="mode==='register'"
+                            ng-model="fields.usn"
                         />
                     </fieldset>
 
@@ -24,6 +46,7 @@
                             class="form-control form-control-lg"
                             type="text"
                             placeholder="Email"
+                            ng-model="fields.email"
                         />
                     </fieldset>
 
@@ -32,11 +55,15 @@
                             class="form-control form-control-lg"
                             type="password"
                             placeholder="Password"
+                            ng-model="fields.pwd"
                         />
                     </fieldset>
 
-                    <button class="btn btn-lg btn-primary pull-xs-right">
-                        Sign up
+                    <button
+                        class="btn btn-lg btn-primary pull-xs-right"
+                        ng-click="sign()"
+                    >
+                        {{ mode === 'login' ? 'Sign in' : 'Sign up' }}
                     </button>
                 </form>
             </div>

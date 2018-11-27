@@ -49,7 +49,7 @@
                 }
                 $scope.listConfig.tagTab.show = true;
                 $scope.listConfig.tagTab.tag = tag;
-                ArticlesService.Articles.getArticles({tag:tag})
+                ArticlesService.Articles.getArticles({ tag: tag })
                     .$promise.then($scope.updateArticles)
                     .catch(() => {
                         console.log('Error when get tag');
@@ -57,12 +57,31 @@
                 break;
             }
         };
-        this.$onInit = ()=>{
+
+        $scope.toggleLike = (slug, i) => {
+            $scope.articlesData.articles[i].isLoading = true;
+            if ($scope.articlesData.articles[i].favorited) {
+                ArticlesService.Articles.unlikeArticle(
+                    { slug: slug },
+                    null
+                ).$promise.then(({ article: article }) => {
+                    $scope.articlesData.articles[i] = article;
+                });
+            } else {
+                ArticlesService.Articles.likeArticle(
+                    { slug: slug },
+                    null
+                ).$promise.then(({ article: article }) => {
+                    $scope.articlesData.articles[i] = article;
+                });
+            }
+        };
+        this.$onInit = () => {
             $scope.listConfig.tagTab.tag = this.tag;
             $scope.changeTab('global');
         };
 
-        this.$onChanges = (changes)=>{
+        this.$onChanges = (changes) => {
             if (changes.tag) {
                 console.log(changes.tag.currentValue);
                 $scope.changeTab('tag', changes.tag.currentValue);
@@ -74,7 +93,7 @@
     let components = {
         templateUrl: 'template/articles.template.html',
         controller: componentsCtrl,
-        bindings: {isAuth: '<', tag: '<'},
+        bindings: { isAuth: '<', tag: '<' },
         controllerAs: '$ctrl',
     };
 

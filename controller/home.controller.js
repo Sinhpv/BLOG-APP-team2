@@ -1,7 +1,7 @@
 ((angular)=>{
     // Controller
-    Controller.$inject = ['$scope', 'isAuth']; //Dependencies injection
-    function Controller($scope, isAuth){
+    Controller.$inject = ['$scope', 'isAuth', 'ArticlesService']; //Dependencies injection
+    function Controller($scope, isAuth, ArticlesService){
         $scope.isAuth = isAuth;
         $scope.tag = '';
         $scope.changeTag = (val)=>{
@@ -9,6 +9,10 @@
             console.log('Tag changed to '+ val);
             
         };
+        $scope.tags = [];
+        ArticlesService.Articles.getAllTags().$promise.then(({tags: tags})=>{
+            $scope.tags = tags;
+        });
     }
 
     // Declaration

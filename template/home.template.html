@@ -19,8 +19,9 @@
                         <a
                             href=""
                             class="tag-pill tag-default"
-                            ng-click="changeTag('programming')"
-                            >programming</a
+                            ng-click="changeTag(atag)"
+                            ng-repeat="atag in tags"
+                            >{{ atag }}</a
                         >
                     </div>
                 </div>

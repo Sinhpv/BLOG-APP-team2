@@ -52,7 +52,7 @@
         </li>
     </ul>
 </div>
-<div class="article-preview" ng-repeat="article in articlesData.articles">
+<div class="article-preview" ng-repeat="(i, article) in articlesData.articles">
     <div class="article-meta">
         <a href="profile.html"><img ng-src="{{article.author.image}}"/></a>
         <div class="info">
@@ -60,8 +60,9 @@
             <span class="date">{{ article.updatedAt }}</span>
         </div>
         <button
+            ng-click="toggleLike(article.slug, i)"
             class="btn btn-sm pull-xs-right "
-            ng-class=" { 'btn-primary': article.favorited, 'btn-outline-primary': !article.favorited }"
+            ng-class=" { 'btn-primary': article.favorited, 'btn-outline-primary': !article.favorited, 'disabled': article.isLoading }"
         >
             <i class="ion-heart"></i> {{ article.favoritesCount }}
         </button>

@@ -16,6 +16,9 @@
                 'getAnArticle' : {method: 'GET', url:`${baseURL}/:slug`},
                 'createArticle' : {method: 'POST', url:`${baseURL}`, headers},
                 'getFeedArticles' : {method: 'GET', url:`${baseURL}/feed`, headers} ,
+                'getAllTags': {method: 'GET', url: 'https://conduit.productionready.io/api/tags' },
+                'likeArticle': {method: 'POST', url: `${baseURL}/:slug/favorite`, headers},
+                'unlikeArticle': {method: 'DELETE', url: `${baseURL}/:slug/favorite`, headers}
             }
         );
     }

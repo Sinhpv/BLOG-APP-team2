@@ -23,16 +23,18 @@
                     templateUrl: '/template/home.template.html',
                     controller: 'HomeController',
                 },
-                articlesState = {
-                    name: 'home.articles',
-                    templateUrl: 'template/articles.template.html',
-                    controller: '',
+                signState = {
+                    name: 'sign',
+                    parent: 'auth',
+                    url: '/{signMode}',
+                    templateUrl: 'template/sign.template.html',
+                    controller: 'SignController'
                 };
 
             $stateProvider
                 .state(authState)
                 .state(homeState)
-                .state(articlesState);
+                .state(signState);
             $urlRouterProvider.when('', '/home');
             $urlRouterProvider.otherwise('/home');
         });
