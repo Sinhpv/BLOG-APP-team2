@@ -14,39 +14,25 @@
             type="text/css"
         />
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="//demo.productionready.io/main.css" />
+        <link rel="stylesheet" href="http://demo.productionready.io/main.css" />
     </head>
-    <body>
-        <nav class="navbar navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="index.html">conduit</a>
-                <ul class="nav navbar-nav pull-xs-right">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">
-                            <i class="ion-compose"></i>&nbsp;New Post
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">
-                            <i class="ion-gear-a"></i>&nbsp;Settings
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Sign up</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <body ng-app="mock-app">
+        <div ui-view></div>
 
-        <div class="home-page"></div>
-
-        <footer>
-            <div class="container">
-                <a href="/" class="logo-font">conduit</a>
-            </div>
-        </footer>
+        <!--
+            --------------------------------------------------------------------------------------------------------------
+        -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+        <script src="https://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-resource.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-cookies.js"></script>
+        <script src="./main/state.js"></script>
+        <script src="./main/main.js"></script>
+        <script src="./service/service.js"></script>
+        <script src="./service/auth.service.js"></script>
+        <script src="./service/articles.service.js"></script>
+        <script src="./controller/main.controller.js"></script>
+        <script src="./controller/home.controller.js"></script>
+        <script src="./components/articles.component.js"></script>
     </body>
 </html>

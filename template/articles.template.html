@@ -1,0 +1,87 @@
+<div class="feed-toggle">
+    <ul class="nav nav-pills outline-active">
+        <li class="nav-item">
+            <a
+                href
+                class="nav-link"
+                ng-click="changeTab('feed')"
+                ng-class="{active: listConfig.type == 'feed'}"
+                ng-show="$ctrl.isAuth"
+                >Your Feed</a
+            >
+        </li>
+
+        <li class="nav-item">
+            <a
+                href
+                class="nav-link"
+                ng-class="{'active': listConfig.type == 'global'}"
+                ng-click="changeTab('global')"
+                ng-hide="listConfig.inProfile"
+                >Global Feed</a
+            >
+        </li>
+        <li class="nav-item">
+            <a
+                href
+                class="nav-link"
+                ng-class="{'active': listConfig.type == 'owned'}"
+                ng-click="changeTab('owned')"
+                ng-show="listConfig.inProfile"
+                >My Articles</a
+            >
+        </li>
+        <li class="nav-item">
+            <a
+                href
+                class="nav-link"
+                ng-class="{'active': listConfig.type == 'fav'}"
+                ng-click="changeTab('fav')"
+                ng-show="listConfig.inProfile"
+                >Favorited Articles</a
+            >
+        </li>
+        <li class="nav-item">
+            <a
+                href
+                class="nav-link"
+                ng-class="{'active': listConfig.type == 'tag'}"
+                ng-show="listConfig.tagTab.show"
+                ><i class="ion-pound"></i> {{ listConfig.tagTab.tag }}</a
+            >
+        </li>
+    </ul>
+</div>
+<div class="article-preview" ng-repeat="article in articlesData.articles">
+    <div class="article-meta">
+        <a href="profile.html"><img ng-src="{{article.author.image}}"/></a>
+        <div class="info">
+            <a href="" class="author">{{ article.author.username }}</a>
+            <span class="date">{{ article.updatedAt }}</span>
+        </div>
+        <button
+            class="btn btn-sm pull-xs-right "
+            ng-class=" { 'btn-primary': article.favorited, 'btn-outline-primary': !article.favorited }"
+        >
+            <i class="ion-heart"></i> {{ article.favoritesCount }}
+        </button>
+    </div>
+
+    <a href="" class="preview-link">
+        <h1>{{ article.title }}</h1>
+        <p>{{ article.description }}</p>
+        <span>Read more...</span>
+        <ul class="tag-list">
+            <li
+                class="tag-default tag-pill tag-outline"
+                ng-repeat="tag in article.tagList"
+            >
+                {{ tag }}
+            </li>
+        </ul>
+    </a>
+</div>
+<div ng-show="!listConfig.isLoading && articles.length=== 0">
+    No article available ...
+</div>
+<div ng-show="listConfig.isLoading">Loading article ...</div>
