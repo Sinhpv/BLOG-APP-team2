@@ -56,8 +56,13 @@
     <div class="article-meta">
         <a href="profile.html"><img ng-src="{{article.author.image}}"/></a>
         <div class="info">
-            <a href="" class="author">{{ article.author.username }}</a>
-            <span class="date">{{ article.updatedAt }}</span>
+            <a
+                href=""
+                class="author"
+                ui-sref="profiles({username:article.author.username})"
+                >{{ article.author.username }}</a
+            >
+            <span class="date">{{ article.updatedAt | date: 'medium' }}</span>
         </div>
         <button
             ng-click="toggleLike(article.slug, i)"
@@ -87,3 +92,9 @@
     No article available ...
 </div>
 <div ng-show="listConfig.isLoading">Loading article ...</div>
+
+<pagination
+    current-page="articlesData.currentPage"
+    total-pages="articlesData.totalPage"
+    change-page="changePage"
+></pagination>

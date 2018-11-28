@@ -1,0 +1,13 @@
+<nav>
+    <ul class="pagination">
+        <!-- ngRepeat: pageNumber in $ctrl.pageRange($ctrl.totalPages) -->
+        <li
+            class="page-item ng-scope"
+            ng-class="{active:  ($index + 1 === $ctrl.currentPage) }"
+            ng-repeat="_ in list track by $index"
+            ng-click="$ctrl.changePage($index + 1)"
+        >
+            <a class="page-link ng-binding" href="">{{ $index + 1 }}</a>
+        </li>
+    </ul>
+</nav>

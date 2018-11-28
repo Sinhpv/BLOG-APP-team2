@@ -19,8 +19,8 @@
             </li>
             <li class="nav-item" ng-show="!isAuth">
                 <a
+                    href
                     class="nav-link"
-                    href=""
                     ui-sref="sign({signMode:'register'})"
                     ui-sref-active="active"
                     >Sign up</a
@@ -28,15 +28,21 @@
             </li>
             <li class="nav-item" ng-show="!isAuth">
                 <a
+                    href
                     class="nav-link"
-                    href=""
                     ui-sref="sign({signMode:'login'})"
                     ui-sref-active="active"
                     >Sign in</a
                 >
             </li>
             <li class="nav-item" ng-show="isAuth">
-                <a class="nav-link" href="">Username</a>
+                <a
+                    href
+                    class="nav-link"
+                    ui-sref="profiles({username:user.username})"
+                    ui-sref-active="active"
+                    >{{ user.username }}</a
+                >
             </li>
         </ul>
     </div>

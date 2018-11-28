@@ -1,58 +1,34 @@
 (() => {
-    angular.module('blogApp')
-    .controller('ctrlProfile', function(profileService, $stateParams, $scope){
-        $stateParams.username = 'bluebird';
-        profileService.getProfile($stateParams.username).then(user => {
-            $scope.profile = user.data.profile;
+    window.angular.module('mock-app')
+        .controller('ctrlProfile', function(profileService, user, isAuth, profile, $stateParams,$state, $scope){
+            $scope.profile = profile;
+            $scope.username = $stateParams.username;
+            $scope.isMyProfile = $scope.username === user.username;
+            $scope.isAuth = isAuth;
+            $scope.isLoading = false;
+
+
             $scope.changeFollow = function () {
-                if ($scope.isFollow == true) {
-                    profileService.unFollow(user.data.profile.username).then((profile) => {
-                        $scope.isFollow = false;
-                    })
+                if (!$scope.isAuth) {
+                    $state.go('sign', { signMode: 'login' });
+                    return;
+                }
+
+                $scope.isLoading = true;
+                if ($scope.profile.following === true) {
+                    profileService.unFollow($scope.username).then($scope.updateProfile);
                 } else {
-                    profileService.follow(user.data.profile.username).then((profile) => {
-                        $scope.isFollow = true;
-                    })
+                    profileService.follow($scope.username).then($scope.updateProfile);
                 }
             };
-        })
+
+            $scope.updateProfile = function (res) {
+                $scope.profile = res.data.profile;
+                $scope.isLoading = false;
+            };
+
         
-    })
-    .controller('ctrlMine', function(profileService, $stateParams, $scope){
-        profileService.getMyArticle($stateParams.username).then(user => {
-            $scope.articles = user.data.articles;
-        })
-    })
-    .controller('ctrlFavorites', function(profileService, $stateParams, $scope){
-        profileService.getFavoriteArticle($stateParams.username).then(user => {
-            $scope.articles = user.data.articles;
-        })
-    })
-    // .controller('ctrlProfileSub', function(profileService, $scope, $rootScope){
-    //     $scope.slug = 'blue-bug-1zxvdn';
-        
-    //     $scope.likeArticle = function(){
-    //         profileService.getArticle($scope.slug).then((user) => {
-    //             let favoriteCount = user.data.article.favoritesCount;
-    //             if (user.data.article.favorited) {
-    //                 profileService.unFavorite($scope.slug).then((favo) => {
-    //                     favoriteCount--;
-    //                     // user.data.article.favoritesCount--;
-    //                     user.data.article.favorited = !favo.data.article.favorited;
-    //                 })
-    //             } else {
-    //                 profileService.favorite($scope.slug).then((favo) => {
-    //                     favoriteCount++;
-    //                     // user.data.article.favoritesCount++;
-    //                     user.data.article.favorited = !favo.data.article.favorited;
-    //                 })
-    //             }
-                
-    //         })
-    //         $rootScope.$digest();
-    //     }
-    // })
-    
+        });
 })();
 
 
