@@ -1,47 +1,40 @@
 <div class="profile-page">
-  <div class="user-info">
+    <div class="user-info">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-10 offset-md-1">
+                    <img ng-src="{{profile.image}}" class="user-img" />
+                    <h4>{{ profile.username }}</h4>
+                    <p>{{ profile.bio }}</p>
+
+                    <button
+                        ui-sref=""
+                        class="btn btn-sm btn-outline-secondary action-btn"
+                        ng-show="isMyProfile"
+                    >
+                        <i class="ion-gear-a"></i> Edit Profile Settings
+                    </button>
+
+                    <button
+                        class="btn btn-sm btn-outline-secondary action-btn"
+                        ng-show="!isMyProfile"
+                        ng-click="changeFollow()"
+                        ng-class="{disabled: isLoading}"
+                    >
+                        <i class="ion-plus-round"></i>
+                        {{ !profile.following ? 'Follow' : 'Unfollow' }}
+                        {{ profile.username }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
     <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-md-10 offset-md-1">
-          <img ng-src="{{profile.image}}" class="user-img" />
-          <h4>{{ profile.username }}</h4>
-          <p>{{ profile.bio }}</p>
-
-          <button
-            ui-sref=""
-            class="btn btn-sm btn-outline-secondary action-btn"
-            ng-show="isAuth"
-          >
-            <i class="ion-gear-a"></i> Edit Profile Settings
-          </button>
-
-          <button class="btn btn-sm btn-outline-secondary action-btn" 
-            ng-show="!isAuth" ng-click="changeFollow()">
-            <i class="ion-plus-round"></i>{{!isFollow ? 'Follow' : 'Unfollow'}} {{profile.username}}
-          </button>
-         
+        <div class="row">
+            <div class="col-xs-12 col-md-10 offset-md-1">
+                <articles usn="username" is-auth="isAuth"></articles>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-md-10 offset-md-1">
-        <div class="articles-toggle">
-          <ul class="nav nav-pills outline-active">
-            <li class="nav-item">
-              <a class="nav-link" ui-sref="profiles.mine({username:profile.username})" ui-sref-active="active">My Articles</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " ui-sref="profiles.favorites({username:profile.username})" ui-sref-active="active">Favorited Articles</a>
-            </li>
-          </ul>
-        </div>
-
-        <ui-view></ui-view>
-
-      </div>
-    </div>
-  </div>
 </div>

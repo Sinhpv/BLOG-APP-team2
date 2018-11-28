@@ -87,3 +87,9 @@
     No article available ...
 </div>
 <div ng-show="listConfig.isLoading">Loading article ...</div>
+
+<pagination
+    current-page="articlesData.currentPage"
+    total-pages="articlesData.totalPage"
+    change-page="changePage"
+></pagination>

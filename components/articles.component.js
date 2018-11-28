@@ -5,71 +5,69 @@
         $scope.articlesData = {
             articles: [],
             articlesCount: 1,
+            currentPage: 1,
+            totalPage: 0
         };
         $scope.listConfig = {
             type: 'none',
             tagTab: {
                 show: false,
-                tag: 'programming',
+                tag: '',
             },
             isLoading: false,
             inProfile: false,
             usn: ''
         };
-        $scope.updateArticles = (res) => {
-            $scope.articlesData.articles = res.articles;
-            $scope.articlesData.articlesCount = res.articlesCount;
+        $scope.updateArticles = ({articles: atc, articlesCount: num }) => {
             $scope.listConfig.isLoading = false;
-            console.log('Data updated');
+            $scope.articlesData = {
+                articles: atc,
+                articlesCount: num,
+                totalPage: Math.floor(num / 20),
+                currentPage: $scope.articlesData.currentPage
+            };
         };
 
         $scope.changeTab = function(type, tag) {
+            console.log(`Changing to type: ${type}`);
+            
             $scope.listConfig.isLoading = true;
-            $scope.listConfig.type = type;
-            $scope.articlesData.articles = [];
             $scope.listConfig.tagTab.show = false;
+            let offset = ($scope.articlesData.currentPage -1 ) * 20;
+
+            if ($scope.listConfig.type !== type || $scope.listConfig.tagTab.tag !== tag) {
+                $scope.listConfig.type = type;
+                $scope.articlesData = {
+                    articles: [],
+                    articlesCount: 1,
+                    currentPage: 1,
+                    totalPage: 0
+                };
+            }
+
             switch (type) {
             case 'global':
-                ArticlesService.Articles.getArticles()
-                    .$promise.then($scope.updateArticles)
-                    .catch(() => {
-                        console.log('Error when get global');
-                    });
+                ArticlesService.Articles.getArticles({offset})
+                    .$promise.then($scope.updateArticles);
                 break;
             case 'feed':
-                ArticlesService.Articles.getFeedArticles()
-                    .$promise.then($scope.updateArticles)
-                    .catch(() => {
-                        console.log('Error when get feed');
-                    });
+                ArticlesService.Articles.getFeedArticles({offset})
+                    .$promise.then($scope.updateArticles);
                 break;
             case 'owned':
-                ArticlesService.Articles.getArticles({author: $scope.listConfig.usn})
-                    .$promise.then($scope.updateArticles)
-                    .catch(() => {
-                        console.log('Error when get fav');
-                    });
+                ArticlesService.Articles.getArticles({author: $scope.listConfig.usn, offset})
+                    .$promise.then($scope.updateArticles);
                 break;
             case 'fav':
-                ArticlesService.Articles.getArticles({favorited: $scope.listConfig.usn})
-                    .$promise.then($scope.updateArticles)
-                    .catch(() => {
-                        console.log('Error when get fav');
-                    });
+                ArticlesService.Articles.getArticles({favorited: $scope.listConfig.usn, offset})
+                    .$promise.then($scope.updateArticles);
                 break;
             case 'tag':
-                if (!tag || tag === '') {
-                    console.log('Tag is not valid');
-                    return;
-                }
+                if (!tag){return;}
                 $scope.listConfig.tagTab.show = true;
                 $scope.listConfig.tagTab.tag = tag;
-                ArticlesService.Articles.getArticles({ tag: tag })
-                    .$promise.then($scope.updateArticles)
-                    .catch(() => {
-                        console.log('Error when get tag');
-                    });
-                break;
+                ArticlesService.Articles.getArticles({ tag, offset })
+                    .$promise.then($scope.updateArticles);
             }
         };
 
@@ -96,22 +94,26 @@
             }
         };
 
-        this.$onInit = function(){
+        $scope.changePage = (num)=>{
+            $scope.articlesData.currentPage = num; 
+            $scope.changeTab($scope.listConfig.type, $scope.listConfig.tagTab.tag);
+        };
+
+        this.$onInit = ()=>{
             if (this.usn) {
                 $scope.listConfig.usn = this.usn;
                 $scope.listConfig.inProfile = true;
-                $scope.changeTab('fav');
+                $scope.changeTab('owned');
                 return;
             }
             $scope.changeTab('global');
         };
 
-        this.$onChanges = function(changes) {
-            if (changes.tag.currentValue) {
-                $scope.listConfig.tagTab.tag = this.tag;
-                $scope.changeTab('tag', changes.tag.currentValue);
+        this.$onChanges = function({tag}) {
+            if (tag) {
+                $scope.listConfig.tagTab.tag = tag;
+                $scope.changeTab('tag', tag.currentValue);
             }
-
         };
     }
 
