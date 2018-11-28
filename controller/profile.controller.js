@@ -27,6 +27,7 @@
                 $scope.isLoading = false;
             };
 
+
         
         });
 })();
