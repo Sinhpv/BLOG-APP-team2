@@ -1,3 +1,3 @@
 ((angular)=>{
-    angular.module('mock-app', ['stateModule','AppService','myAppArticle']);
+    angular.module('mock-app', ['stateModule','AppService']);
 })(window.angular);
