@@ -1,5 +1,5 @@
 window.angular
-    .module('myAppArticle')
+    .module('AppService')
     .factory('appService', function($http, AuthService) {
         let baseUrl = 'https://conduit.productionready.io/api',
             headers = {};

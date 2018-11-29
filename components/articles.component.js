@@ -6,7 +6,7 @@
             articles: [],
             articlesCount: 1,
             currentPage: 1,
-            totalPage: 0
+            totalPage: 0,
         };
         $scope.listConfig = {
             type: 'none',
@@ -16,58 +16,69 @@
             },
             isLoading: false,
             inProfile: false,
-            usn: ''
+            usn: '',
         };
-        $scope.updateArticles = ({articles: atc, articlesCount: num }) => {
+        $scope.updateArticles = ({ articles: atc, articlesCount: num }) => {
             $scope.listConfig.isLoading = false;
             $scope.articlesData = {
                 articles: atc,
                 articlesCount: num,
                 totalPage: Math.floor(num / 20),
-                currentPage: $scope.articlesData.currentPage
+                currentPage: $scope.articlesData.currentPage,
             };
         };
 
         $scope.changeTab = function(type, tag) {
-            console.log(`Changing to type: ${type}`);
-            
             $scope.listConfig.isLoading = true;
             $scope.listConfig.tagTab.show = false;
-            let offset = ($scope.articlesData.currentPage -1 ) * 20;
+            let offset = ($scope.articlesData.currentPage - 1) * 20;
 
-            if ($scope.listConfig.type !== type || $scope.listConfig.tagTab.tag !== tag) {
+            if (
+                $scope.listConfig.type !== type ||
+                $scope.listConfig.tagTab.tag !== tag
+            ) {
                 $scope.listConfig.type = type;
                 $scope.articlesData = {
                     articles: [],
                     articlesCount: 1,
                     currentPage: 1,
-                    totalPage: 0
+                    totalPage: 0,
                 };
             }
 
             switch (type) {
             case 'global':
-                ArticlesService.Articles.getArticles({offset})
-                    .$promise.then($scope.updateArticles);
+                ArticlesService.Articles.getArticles({
+                    offset,
+                }).$promise.then($scope.updateArticles);
                 break;
             case 'feed':
-                ArticlesService.Articles.getFeedArticles({offset})
-                    .$promise.then($scope.updateArticles);
+                ArticlesService.Articles.getFeedArticles({
+                    offset,
+                }).$promise.then($scope.updateArticles);
                 break;
             case 'owned':
-                ArticlesService.Articles.getArticles({author: $scope.listConfig.usn, offset})
-                    .$promise.then($scope.updateArticles);
+                ArticlesService.Articles.getArticles({
+                    author: $scope.listConfig.usn,
+                    offset,
+                }).$promise.then($scope.updateArticles);
                 break;
             case 'fav':
-                ArticlesService.Articles.getArticles({favorited: $scope.listConfig.usn, offset})
-                    .$promise.then($scope.updateArticles);
+                ArticlesService.Articles.getArticles({
+                    favorited: $scope.listConfig.usn,
+                    offset,
+                }).$promise.then($scope.updateArticles);
                 break;
             case 'tag':
-                if (!tag){return;}
+                if (!tag) {
+                    return;
+                }
                 $scope.listConfig.tagTab.show = true;
                 $scope.listConfig.tagTab.tag = tag;
-                ArticlesService.Articles.getArticles({ tag, offset })
-                    .$promise.then($scope.updateArticles);
+                ArticlesService.Articles.getArticles({
+                    tag,
+                    offset,
+                }).$promise.then($scope.updateArticles);
             }
         };
 
@@ -94,22 +105,27 @@
             }
         };
 
-        $scope.changePage = (num)=>{
-            $scope.articlesData.currentPage = num; 
-            $scope.changeTab($scope.listConfig.type, $scope.listConfig.tagTab.tag);
+        $scope.changePage = (num) => {
+            $scope.articlesData.currentPage = num;
+            $scope.changeTab(
+                $scope.listConfig.type,
+                $scope.listConfig.tagTab.tag
+            );
         };
 
-        this.$onInit = ()=>{
+        this.$onInit = () => {
             if (this.usn) {
                 $scope.listConfig.usn = this.usn;
                 $scope.listConfig.inProfile = true;
                 $scope.changeTab('owned');
-                return;
+            } else if (this.isAuth) {
+                $scope.changeTab('feed');
+            } else{
+                $scope.changeTab('global');
             }
-            $scope.changeTab('global');
         };
 
-        this.$onChanges = function({tag}) {
+        this.$onChanges = function({ tag }) {
             if (tag) {
                 $scope.listConfig.tagTab.tag = tag;
                 $scope.changeTab('tag', tag.currentValue);

@@ -6,8 +6,6 @@
         $scope.tag = '';
         $scope.changeTag = (val)=>{
             $scope.tag = new String(val);
-            console.log('Tag changed to '+ val);
-            
         };
         $scope.tags = [];
         ArticlesService.Articles.getAllTags().$promise.then(({tags: tags})=>{

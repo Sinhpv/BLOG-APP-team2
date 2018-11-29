@@ -1,7 +1,7 @@
 ((angular)=>{
     // Controller
-    Controller.$inject = ['$scope','isAuth', 'user', 'AuthService', '$state']; //Dependencies injection
-    function Controller($scope, isAuth, user, AuthService, $state){
+    Controller.$inject = ['$scope','isAuth', 'user', 'AuthService']; //Dependencies injection
+    function Controller($scope, isAuth, user, AuthService){
         $scope.isAuth = isAuth;
         $scope.signOut = ()=>{
             AuthService.signOut();

@@ -1,59 +1,66 @@
 (() => {
-    angular.module('blogApp')
-    .controller('ctrlEditorArticle', function(editorService, $scope, $state, $stateParams){
-        if(!$scope.article){
-            $scope.article = {
-                title: '',
-                description: '',
-                body: '',
-                tagList: []
-            }
-        }else{
-            // $scope.article = article;
-            console.log("e");
-        }
-        
-        $scope.addTag = function(){
-            $scope.article.tagList.push($scope.tagField);
-            $scope.tagField = '';
-        }
+    angular
+        .module('mock-app')
+        .controller('ctrlEditorArticle', function(
+            editorService,
+            $scope,
+            $state,
+            $stateParams,
+            article
+        ) {
+            $scope.article = article;
+            // if (!$scope.article) {
+            //     $scope.article = {
+            //         title: '',
+            //         description: '',
+            //         body: '',
+            //         tagList: [],
+            //     };
+            // }
 
-        $scope.removeTag = function(tag){
-            $scope.article.tagList = $scope.article.tagList.filter((tagg) => tagg != tag)
-        }
+            $scope.addTag = function() {
+                $scope.article.tagList.push($scope.tagField);
+                $scope.tagField = '';
+            };
 
-        $scope.publishArticle = function(){
-            // $scope.article.tagList.push($scope.tag);
-            let data = {
-                title: $scope.article.title,
-                description: $scope.article.description,
-                body: $scope.article.body,
-                tagList: $scope.article.tagList
-            }
-            console.log(data.tagList);
-            if ($stateParams.slug == undefined){
-                editorService.createArticle(data).then(
-                    (success) => {
-                        $state.go('article', { slug: success.slug });
+            $scope.removeTag = function(tag) {
+                $scope.article.tagList = $scope.article.tagList.filter(
+                    (tagg) => tagg != tag
+                );
+            };
+
+            $scope.publishArticle = function() {
+                // Request body
+                let data = {
+                    article: {
+                        title: $scope.article.title,
+                        description: $scope.article.description,
+                        body: $scope.article.body,
+                        tagList: $scope.article.tagList,
                     },
-                    (err) => {
-                        $scope.errors = err.data.errors;
-                    }
-                )
-            }else{
-                editorService.editArticle(data, $stateParams.slug).then(
-                    (success) => {
-                        $state.go('article', { slug: success.slug });
-                    },
-                    (err) => {
-                        $scope.errors = err.data.errors;
-                    }
-                )
-            }
-        }
-    })
-    
+                };
+
+                // Go to newly created article
+                if ($stateParams.slug == undefined) {
+                    editorService.createArticle(data).then(
+                        ({data:{article:{slug: slug}}}) => {
+                            $state.go('article', { slug });
+                        },
+                        (err) => {
+                            $scope.errors = err.data.errors;
+                        }
+                    );
+                // Go to edited article                
+                } else {
+                    editorService.editArticle(data, $stateParams.slug).then(
+                        ({data:{article:{slug: slug}}}) => {
+                            $state.go('article', { slug });
+                        },
+                        (err) => {
+                            $scope.errors = err.data.errors;
+                        }
+                    );
+                }
+            };
+        });
 })();
-
-
-

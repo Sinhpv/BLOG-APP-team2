@@ -14,7 +14,7 @@
                 <button
                     class="btn btn-sm btn-outline-secondary"
                     ng-click="changeFollow()"
-                    ng-show="isAuth"
+                    ng-show="isAuth && !isMyArt"
                 >
                     <i class="ion-plus-round"></i> &nbsp;
                     {{ isFollow ? 'Follow' : 'Unfollow' }}
@@ -30,17 +30,16 @@
                 </button>
                 <button
                     class="btn btn-outline-secondary btn-sm"
-                    ng-click="editArt()"
                     href="#"
+                    ui-sref="editor({slug})"
                     ng-show="isMyArt"
                 >
                     <i class="ion-edit"></i> Edit Article
                 </button>
-                &nbsp;&nbsp;
                 <button
                     class="btn btn-sm btn-outline-primary"
                     ng-click="changeFavorite()"
-                    ng-show="isAuth"
+                    ng-show="isAuth && !isMyArt"
                 >
                     <i class="ion-heart"></i> &nbsp;
                     {{ isFavorite ? 'Favorite' : 'Unfavorite' }} Article
@@ -88,7 +87,7 @@
                 <button
                     class="btn btn-sm btn-outline-secondary"
                     ng-click="changeFollow()"
-                    ng-show="isAuth"
+                    ng-show="isAuth && !isMyArt"
                 >
                     <i class="ion-plus-round"></i> &nbsp;
                     {{ isFollow ? 'Follow' : 'Unfollow' }}
@@ -104,17 +103,16 @@
                 </button>
                 <button
                     class="btn btn-outline-secondary btn-sm"
-                    ng-click="editArt()"
                     href="#"
+                    ui-sref="editor({slug})"
                     ng-show="isMyArt"
                 >
                     <i class="ion-edit"></i> Edit Article
                 </button>
-                &nbsp;
                 <button
                     class="btn btn-sm btn-outline-primary"
                     ng-click="changeFavorite()"
-                    ng-show="isAuth"
+                    ng-show="isAuth && !isMyArt"
                 >
                     <i class="ion-heart"></i> &nbsp;
                     {{ isFavorite ? 'Favorite' : 'Unfavorite' }} Article
@@ -151,7 +149,7 @@
                     </div>
                     <div class="card-footer">
                         <img
-                            src="http://i.imgur.com/Qr71crq.jpg"
+                            ng-src="{{article.author.image}}"
                             class="comment-author-img"
                         />
                         <button

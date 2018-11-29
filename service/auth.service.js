@@ -1,52 +1,68 @@
 ((angular) => {
-    AuthService.$inject = ['$cookies', '$http','$state', '$q'];
+    AuthService.$inject = ['$cookies', '$http', '$state', '$q'];
     function AuthService($cookies, $http, $state, $q) {
-        
         this.base = 'https://conduit.productionready.io';
 
         this.setCookies = (token) => {
             $cookies.put(
                 'token',
-                token || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NDI3NjksInVzZXJuYW1lIjoiMncxencxemUiLCJleHAiOjE1NDgwNjQzOTV9.q085x1Zeqfs6fQLwUIc1QAc5PfiBPg0HzU_MQAdY00I'
+                token ||
+                    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NDI3NjksInVzZXJuYW1lIjoiMncxencxemUiLCJleHAiOjE1NDgwNjQzOTV9.q085x1Zeqfs6fQLwUIc1QAc5PfiBPg0HzU_MQAdY00I'
             );
         };
 
-        this.checkAuth = () => this.getUserInfo().then(() =>  true, () => false);
+        this.checkAuth = () => this.getUserInfo().then(() => true, () => false);
 
-        this.register = (username, email, password) => 
-            $http.post(`${this.base}/api/users`, {user: {username, email, password}})
+        this.register = (username, email, password) =>
+            $http
+                .post(`${this.base}/api/users`, {
+                    user: { username, email, password },
+                })
                 .then(
                     (res) => {
                         $cookies.put('token', res.data.user.token);
-                        $state.go('home', null,{reload: true});
+                        $state.go('home', null, { reload: true });
                         return res.data;
                     },
-                    (err) => $q.reject(err.data));
+                    (err) => $q.reject(err.data)
+                );
 
-        this.getUserInfo = () => 
-            $http.get(`${this.base}/api/user`, {
-                headers: {Authorization: `Token ${$cookies.get('token')}`,
-                }
-            }).then(res => res.data.user);
-    
+        this.getUserInfo = () =>
+            $http
+                .get(`${this.base}/api/user`, {
+                    headers: {
+                        Authorization: `Token ${$cookies.get('token')}`,
+                    },
+                })
+                .then((res) => res.data.user);
 
         this.getToken = () => $cookies.get('token');
 
-
-        this.signIn = (email, password) => 
-            $http.post(`${this.base}/api/users/login`, {user: {email, password}})
+        this.signIn = (email, password) =>
+            $http
+                .post(`${this.base}/api/users/login`, {
+                    user: { email, password },
+                })
                 .then(
-                    res=>{  
+                    (res) => {
                         $cookies.put('token', res.data.user.token);
-                        $state.go('home', null,{reload: true});
+                        $state.go('home', null, { reload: true });
                         return res.data;
-                    }, 
-                    err=> $q.reject(err.data)) ;
-        
+                    },
+                    (err) => $q.reject(err.data)
+                );
 
-        this.signOut = ()=>{
+        this.signOut = () => {
             $cookies.put('token', '');
-            $state.go('home', null,{reload: true});
+            $state.go('home', null, { reload: true });
+        };
+
+        this.updateSettings = (user) => {
+            return $http.put(
+                `${this.base}/api/user`,
+                { user },
+                { headers: { Authorization: `Token ${$cookies.get('token')}` } }
+            );
         };
     }
 

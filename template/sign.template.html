@@ -21,12 +21,12 @@
                     >
                 </p>
 
-                <ul class="error-messages">
-                    <li ng-repeat="error in errors.email">
-                        That email {{ error }}
-                    </li>
-                    <li ng-repeat="error in errors.password">
-                        That password {{ error }}
+                <ul
+                    class="error-messages"
+                    ng-repeat="(errType, errs) in errors"
+                >
+                    <li ng-repeat="error in errs">
+                        {{ errType + ' ' + error }}
                     </li>
                 </ul>
 
