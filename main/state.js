@@ -252,6 +252,11 @@
                     url: '/editor',
                     templateUrl: 'template/new.article.html',
                     controller: 'ctrlEditorArticle',
+                    resolve: {
+                        article: function(ArticlesService, $stateParams) {
+                            return null;
+                        },
+                    },
                 },
                 {
                     name: 'editor',

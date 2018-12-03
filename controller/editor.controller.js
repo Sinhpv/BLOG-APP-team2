@@ -9,14 +9,14 @@
             article
         ) {
             $scope.article = article;
-            // if (!$scope.article) {
-            //     $scope.article = {
-            //         title: '',
-            //         description: '',
-            //         body: '',
-            //         tagList: [],
-            //     };
-            // }
+            if (!$scope.article) {
+                $scope.article = {
+                    title: '',
+                    description: '',
+                    body: '',
+                    tagList: [],
+                };
+            }
 
             $scope.addTag = function() {
                 $scope.article.tagList.push($scope.tagField);
