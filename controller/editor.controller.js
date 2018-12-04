@@ -14,19 +14,20 @@
                     title: '',
                     description: '',
                     body: '',
-                    tagList: [],
+                    tagList: []
                 };
             }
-
+            let tmp = new Set();
             $scope.addTag = function() {
-                $scope.article.tagList.push($scope.tagField);
-                $scope.tagField = '';
+                if ($scope.tagField != undefined){
+                    tmp.add($scope.tagField);
+                    $scope.article.tagList = [...tmp];
+                    $scope.tagField = '';
+                }
             };
 
             $scope.removeTag = function(tag) {
-                $scope.article.tagList = $scope.article.tagList.filter(
-                    (tagg) => tagg != tag
-                );
+                $scope.article.tagList = $scope.article.tagList.filter((tagg) => tagg != tag)
             };
 
             $scope.publishArticle = function() {
