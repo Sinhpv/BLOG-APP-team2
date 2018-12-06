@@ -19,7 +19,7 @@
   * Favorite articles
   * Follow other users
 
-  **Technolody**:
+  **Technology**:
   * Languages: HTML, JavaScript, CSS
   * Javascript Frameworks: AngularJS
   * CSS Frameworks: Bootstrap 4
