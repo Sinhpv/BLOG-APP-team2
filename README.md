@@ -19,3 +19,9 @@
   * Favorite articles
   * Follow other users
 
+  **Technolody**:
+  * Languages: HTML, JavaScript, CSS
+  * Javascript Frameworks: AngularJS
+  * CSS Frameworks: Bootstrap 4
+  * Source Control: Github
+  * Code Quality Analysis: Prettier
