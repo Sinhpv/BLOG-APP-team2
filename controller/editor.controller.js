@@ -19,7 +19,7 @@
             }
             let tmp = new Set();
             $scope.addTag = function() {
-                if ($scope.tagField != undefined){
+                if ($scope.tagField !== '' && $scope.tagField !== undefined){
                     tmp.add($scope.tagField);
                     $scope.article.tagList = [...tmp];
                     $scope.tagField = '';
